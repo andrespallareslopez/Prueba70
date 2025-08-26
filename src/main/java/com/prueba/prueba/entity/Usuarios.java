@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.prueba.prueba.entity;
 
 //import java.time.ZonedDateTime;
@@ -23,72 +19,73 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- *
- * @author andre
- */
 @Entity
 @Data
-@AllArgsConstructor
+@AllArgsConstructor 
 @NoArgsConstructor
 @Builder
-@Table(name="roles")
-public class Roles {
-    
+@Table(name = "usuarios")   
+public class Usuarios {
+      
     @Id
-    @SequenceGenerator(
-        name="roles_roleid_seq",
-        sequenceName="roles_roleid_seq",
+      @SequenceGenerator(
+        name="usuarios_userid_seq",
+        sequenceName="usuarios_userid_seq",
         allocationSize=1
     )
     @GeneratedValue(
-        generator = "roles_roleid_seq",
+        generator = "usuarios_userid_seq",
         strategy = GenerationType.SEQUENCE
     )
-    private int roleid;
-    private String rolename;
-    
+    private Integer userid;
+    private String username;
+    private boolean state;
+
     
     @Embedded
     private CamposAuditoria camposAuditoria;
+
     //private String aud_usu;
     //private ZonedDateTime aud_tim;  
-
+    
     // Many-to-many via join entity UsersInRoles
-    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private Set<UsersInRoles> usersInRoles = new HashSet<>();
-
+    
     // Helpers to manage the link entity and keep both sides in sync
-    public void addUser(Usuarios user, String auditor) {
+    public void addRole(Roles role, String auditor) {
+        // Create link; with @MapsId it's fine to leave id empty; JPA will populate from associations
         UsersInRoles link = new UsersInRoles();
         link.setId(new UsersInRolesId());
-        link.setUser(user);
-        link.setRole(this);
+        link.setUser(this);
+        link.setRole(role);
         //link.setAudUsu(auditor);
-        //link.setAudTim(java.time.ZonedDateTime.now());
+        //link.setAudTim(ZonedDateTime.now());
 
         this.usersInRoles.add(link);
-        user.getUsersInRoles().add(link);
+        role.getUsersInRoles().add(link);
     }
 
-    public void removeUser(Usuarios user) {
+    public void removeRole(Roles role) {
+        // Remove the link from both sides
         UsersInRoles toRemove = this.usersInRoles.stream()
-            .filter(uir -> uir.getUser() != null && uir.getUser().equals(user))
+            .filter(uir -> uir.getRole() != null && uir.getRole().equals(role))
             .findFirst()
             .orElse(null);
         if (toRemove != null) {
             this.usersInRoles.remove(toRemove);
-            user.getUsersInRoles().remove(toRemove);
+            role.getUsersInRoles().remove(toRemove);
+            // Break references for GC safety
             toRemove.setUser(null);
             toRemove.setRole(null);
         }
     }
 
-    // Convenience view of users
-    public Set<Usuarios> getUsers() {
+    // Convenience view of roles
+    public Set<Roles> getRoles() {
         return this.usersInRoles.stream()
-            .map(UsersInRoles::getUser)
+            .map(UsersInRoles::getRole)
             .collect(Collectors.toCollection(HashSet::new));
     }
 }
