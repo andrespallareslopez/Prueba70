@@ -1,3 +1,14 @@
-com\prueba\prueba\PruebaApplication.class
+com\prueba\prueba\entity\Usuarios$UsuariosBuilder.class
 com\prueba\prueba\entity\Roles.class
+com\prueba\prueba\entity\UsersInRoles.class
+com\prueba\prueba\entity\CamposAuditoria.class
+com\prueba\prueba\entity\UsersInRolesId$UsersInRolesIdBuilder.class
+com\prueba\prueba\PruebaApplication.class
+com\prueba\prueba\repository\UsersInRolesRepository.class
+com\prueba\prueba\entity\Usuarios.class
 com\prueba\prueba\entity\Roles$RolesBuilder.class
+com\prueba\prueba\entity\UsersInRoles$UsersInRolesBuilder.class
+com\prueba\prueba\entity\CamposAuditoria$CamposAuditoriaBuilder.class
+com\prueba\prueba\entity\UsersInRolesId.class
+com\prueba\prueba\repository\RolesRepository.class
+com\prueba\prueba\repository\UsuariosRepository.class

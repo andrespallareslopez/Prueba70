@@ -1,6 +1,8 @@
 package com.prueba.prueba;
 
 import java.time.ZonedDateTime;
+import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,5 +40,19 @@ class RolesTests {
 
           rolesRepository.save(roles);
           
+    }
+
+    @Test
+    public void getRoles(){
+        
+       List<Roles> roles = rolesRepository.findAll();
+          
+       System.out.println(roles.size());
+       
+       Optional<Roles> role = rolesRepository.findById(1);
+       
+       System.out.println(role.toString());
+       
+       
     }
 }
